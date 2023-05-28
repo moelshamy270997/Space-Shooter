@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioScript : MonoBehaviour
 {
     [SerializeField] AudioClip selectSFX;
+    [SerializeField] AudioClip laserCreatedSFX;
     AudioSource audioSource;
 
     void Start()
@@ -21,5 +20,10 @@ public class AudioScript : MonoBehaviour
     public void SelectSFX()
     {
         audioSource.PlayOneShot(selectSFX, 0.5f);
+    }
+
+    public void LaserCreatedSFX()
+    {
+        audioSource.PlayOneShot(laserCreatedSFX, 0.5f);
     }
 }

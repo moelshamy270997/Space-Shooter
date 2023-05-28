@@ -1,13 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserScript : MonoBehaviour
 {
+    AudioScript audioScript;
+
     float speed = 10f;
 
     void Start()
     {
+        audioScript = GameObject.Find("AudioObject").GetComponent<AudioScript>();
+        audioScript.LaserCreatedSFX();
         StartCoroutine(MoveRightCoroutine(gameObject));
     }
 
@@ -18,5 +21,10 @@ public class LaserScript : MonoBehaviour
             obj.transform.Translate(Vector3.up * speed * Time.deltaTime);
             yield return null;
         }
+    }
+
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }

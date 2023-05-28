@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class MenuScript : MonoBehaviour
 {
     AudioScript audioScript;
     [SerializeField] TextMeshProUGUI infoTxt;
     [SerializeField] TextMeshProUGUI highScoreTxt;
+
     float zoomSpeed = 0.2f, maxScale = 1.1f, minScale = 0.9f, currentScale = 0.2f;
     bool zoomIn = true;
     int highScore;
@@ -29,13 +31,13 @@ public class MenuScript : MonoBehaviour
     void Update()
     {
         InfoTxtMove();
-
+        
         if (Input.anyKeyDown)
         {
             audioScript.SelectSFX();
             SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         }
-            
+        
     }
 
     void InfoTxtMove()
@@ -52,4 +54,5 @@ public class MenuScript : MonoBehaviour
 
         infoTxt.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
     }
+
 }

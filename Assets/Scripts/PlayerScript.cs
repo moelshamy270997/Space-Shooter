@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -17,9 +18,11 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] InputActionReference playerFire;
     [SerializeField] InputActionReference playerTripleFire;
 
+    [SerializeField] TextMeshProUGUI godModeTxt;
+
 
     float cooldownDuration = 2f;
-    private bool isOnCooldown = false;
+    private bool isOnCooldown = false, godMode = false;
     [SerializeField] Image cooldownImage;
         
     float speed = 5f;
@@ -40,7 +43,10 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            GodMode();
+        }
     }
 
     private void OnEnable()
@@ -105,10 +111,9 @@ public class PlayerScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("EnemyLaser"))
+        if (collision.CompareTag("EnemyLaser") && !godMode)
         {
             Destroy(collision.gameObject);
-            // Destroy(gameObject);
             gameObject.SetActive(false);
             audioScript.ExplosionSFX();
             Invoke("ReturnToMenu", 3f);
@@ -118,5 +123,13 @@ public class PlayerScript : MonoBehaviour
     private void ReturnToMenu()
     {
         SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+    }
+
+    private void GodMode()
+    {
+        godMode = !godMode;
+        godModeTxt.gameObject.SetActive(godMode);
+        if (godMode)
+            audioScript.GodModeSFX();
     }
 }

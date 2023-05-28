@@ -99,4 +99,12 @@ public class PlayerScript : MonoBehaviour
         cooldownImage.fillAmount = 1f;
     }
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("EnemyLaser"))
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
 }

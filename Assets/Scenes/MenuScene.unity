@@ -10623,6 +10623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectSFX: {fileID: 8300000, guid: e7c3bbf3e194a6b4ebeebf619f108806, type: 3}
   laserCreatedSFX: {fileID: 8300000, guid: 51cd2f5fd627dd343ac28bac231ef1aa, type: 3}
+  enemyHitSFX: {fileID: 8300000, guid: 2ab0f1363482cc1469e52d64af5dea1e, type: 3}
 --- !u!4 &2098226727
 Transform:
   m_ObjectHideFlags: 0

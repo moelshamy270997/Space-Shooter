@@ -4,6 +4,7 @@ public class AudioScript : MonoBehaviour
 {
     [SerializeField] AudioClip selectSFX;
     [SerializeField] AudioClip laserCreatedSFX;
+    [SerializeField] AudioClip enemyHitSFX;
     AudioSource audioSource;
 
     void Start()
@@ -25,5 +26,10 @@ public class AudioScript : MonoBehaviour
     public void LaserCreatedSFX()
     {
         audioSource.PlayOneShot(laserCreatedSFX, 0.5f);
+    }
+
+    public void EnemyHitSFX()
+    {
+        audioSource.PlayOneShot(enemyHitSFX, 0.5f);
     }
 }

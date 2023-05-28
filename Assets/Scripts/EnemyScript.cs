@@ -5,14 +5,20 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     float moveSpeed = 5f;
-    [SerializeField] GameObject topLimit;
-    [SerializeField] GameObject bottomLimit;
+    GameObject topLimit;
+    GameObject bottomLimit;
     [SerializeField] GameObject laserPrefab;
+    AudioScript audioScript;
     bool movingUp = true;
     public int hp;
 
     void Start()
     {
+        audioScript = GameObject.Find("AudioObject").GetComponent<AudioScript>();
+
+        topLimit = GameObject.Find("EnemyTopLimit").gameObject;
+        bottomLimit = GameObject.Find("EnemyBottomLimit").gameObject;
+
         StartCoroutine(MoveCoroutine());
         StartCoroutine(PerformActionCoroutine());
     }
@@ -50,6 +56,40 @@ public class EnemyScript : MonoBehaviour
                 movingUp = true;
 
             yield return null;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("PlayerLaser"))
+        {
+            audioScript.EnemyHitSFX();
+            // TODO: floating number effect
+            hp -= 1;
+            CheckHP();
+
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("PlayerTripleLaser"))
+        {
+            audioScript.EnemyHitSFX();
+            // TODO: floating number effect
+            hp -= 2;
+            CheckHP();
+
+            Destroy(collision.gameObject);
+        }
+    }
+
+    private void CheckHP()
+    {
+        if (hp <= 0)
+        {
+            // Enemy is dead
+            Destroy(gameObject);
+
+            // TODO: explosion effect
         }
     }
 

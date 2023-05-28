@@ -335,7 +335,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.071414866}
+  m_Offset: {x: 0, y: -0.07}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -346,7 +346,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.98, y: 0.6071703}
+  m_Size: {x: 0.98, y: 0.6}
   m_EdgeRadius: 0
 --- !u!212 &343974649
 SpriteRenderer:
@@ -787,6 +787,7 @@ MonoBehaviour:
   selectSFX: {fileID: 8300000, guid: e7c3bbf3e194a6b4ebeebf619f108806, type: 3}
   laserCreatedSFX: {fileID: 8300000, guid: 51cd2f5fd627dd343ac28bac231ef1aa, type: 3}
   enemyHitSFX: {fileID: 8300000, guid: 2ab0f1363482cc1469e52d64af5dea1e, type: 3}
+  explosionSFX: {fileID: 8300000, guid: 612a347949e7721478f36c965aaba3a7, type: 3}
 --- !u!1 &718556542
 GameObject:
   m_ObjectHideFlags: 0
@@ -6007,7 +6008,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1681851611
   m_SortingLayer: 1
-  m_SortingOrder: 5
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 7aa236d34a919804582efe1761f344e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

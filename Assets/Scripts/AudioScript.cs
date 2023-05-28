@@ -5,7 +5,10 @@ public class AudioScript : MonoBehaviour
     [SerializeField] AudioClip selectSFX;
     [SerializeField] AudioClip laserCreatedSFX;
     [SerializeField] AudioClip enemyHitSFX;
+    [SerializeField] AudioClip explosionSFX;
     AudioSource audioSource;
+
+    float musicFadeDuration = 1f;
 
     void Start()
     {
@@ -32,4 +35,27 @@ public class AudioScript : MonoBehaviour
     {
         audioSource.PlayOneShot(enemyHitSFX, 0.5f);
     }
+
+    public void ExplosionSFX()
+    {
+        audioSource.PlayOneShot(explosionSFX, 0.5f);
+        StartCoroutine(FadeOutMusic());
+    }
+
+    private System.Collections.IEnumerator FadeOutMusic()
+    {
+        float elapsedTime = 0f;
+        float startVolume = audioSource.volume;
+
+        while (elapsedTime < musicFadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, elapsedTime / musicFadeDuration);
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume;
+    }
+
 }

@@ -1,13 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
     Rigidbody2D rb;
     Vector2 moveDirection = Vector2.zero;
+
+    AudioScript audioScript;
 
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject tripleLaserPrefab;
@@ -25,6 +27,8 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
+        audioScript = GameObject.Find("AudioObject").GetComponent<AudioScript>();
+
         rb = GetComponent<Rigidbody2D>();
         cooldownImage.fillAmount = 0f;
     }
@@ -104,7 +108,15 @@ public class PlayerScript : MonoBehaviour
         if (collision.CompareTag("EnemyLaser"))
         {
             Destroy(collision.gameObject);
+            // Destroy(gameObject);
+            gameObject.SetActive(false);
+            audioScript.ExplosionSFX();
+            Invoke("ReturnToMenu", 3f);
         }
     }
 
+    private void ReturnToMenu()
+    {
+        SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+    }
 }

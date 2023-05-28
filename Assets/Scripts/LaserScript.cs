@@ -14,6 +14,15 @@ public class LaserScript : MonoBehaviour
         StartCoroutine(MoveRightCoroutine(gameObject));
     }
 
+    void FixedUpdate()
+    {
+        // First Super Attack Effect
+        if (transform.position.y > 4f)
+            transform.rotation = Quaternion.Euler(0f, 0f, -135f);
+        if (transform.position.y < -4f)
+            transform.rotation = Quaternion.Euler(0f, 0f, -45);
+    }
+
     private IEnumerator MoveRightCoroutine(GameObject obj)
     {
         while (true)
@@ -27,4 +36,5 @@ public class LaserScript : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
 }

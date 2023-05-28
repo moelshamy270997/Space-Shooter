@@ -88,6 +88,7 @@ public class EnemyScript : MonoBehaviour
         {
             // Enemy is dead
             Destroy(gameObject);
+            audioScript.ExplosionSFX();
 
             // TODO: explosion effect
         }

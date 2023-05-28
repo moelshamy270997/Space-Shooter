@@ -14,6 +14,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject tripleLaserPrefab;
+    [SerializeField] GameObject firstSuperLaserPrefab;
     [SerializeField] InputActionReference playerMovement;
     [SerializeField] InputActionReference playerFire;
     [SerializeField] InputActionReference playerTripleFire;
@@ -46,6 +47,31 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             GodMode();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            StartCoroutine(FirstSuperAttack());
+            
+        }
+    }
+
+    private IEnumerator FirstSuperAttack()
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            StartCoroutine(CreateLaserOfFirstSuperAttack());
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+    private IEnumerator CreateLaserOfFirstSuperAttack()
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            Instantiate(firstSuperLaserPrefab, transform.position + Vector3.right, Quaternion.Euler(0f, 0f, -90f + j * 5f));
+            yield return new WaitForSeconds(0.02f);
+            Instantiate(firstSuperLaserPrefab, transform.position + Vector3.right, Quaternion.Euler(0f, 0f, -90f - j * 5f));
+            yield return new WaitForSeconds(0.02f);
         }
     }
 
@@ -116,6 +142,7 @@ public class PlayerScript : MonoBehaviour
             Destroy(collision.gameObject);
             gameObject.SetActive(false);
             audioScript.ExplosionSFX();
+            // TODO: explosion particle effect
             Invoke("ReturnToMenu", 3f);
         }
     }

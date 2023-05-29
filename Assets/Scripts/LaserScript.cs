@@ -17,9 +17,9 @@ public class LaserScript : MonoBehaviour
     void FixedUpdate()
     {
         // First Super Attack Effect
-        if (transform.position.y > 4f)
+        if (transform.position.y > 4f && gameObject.CompareTag("PlayerFirstSuperLaser"))
             transform.rotation = Quaternion.Euler(0f, 0f, -135f);
-        if (transform.position.y < -4f)
+        if (transform.position.y < -4f && gameObject.CompareTag("PlayerFirstSuperLaser"))
             transform.rotation = Quaternion.Euler(0f, 0f, -45);
     }
 

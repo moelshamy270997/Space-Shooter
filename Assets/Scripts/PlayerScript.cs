@@ -163,9 +163,11 @@ public class PlayerScript : MonoBehaviour
             Destroy(collision.gameObject);
             gameObject.SetActive(false);
             audioScript.ExplosionSFX();
+
             // Set the highest score
             if (PlayerPrefs.GetInt("highScore") < currentScore)
                 PlayerPrefs.SetInt("highScore", currentScore);
+
             // TODO: explosion particle effect
             Invoke("ReturnToMenu", 3f);
         }

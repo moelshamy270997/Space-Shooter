@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EnemyScript : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class EnemyScript : MonoBehaviour
     GameObject topLimit;
     GameObject bottomLimit;
     [SerializeField] GameObject laserPrefab;
+    [SerializeField] GameObject floatingTxt;
+    [SerializeField] Canvas canvas;
     AudioScript audioScript;
     bool movingUp = true;
     public int hp;
@@ -21,11 +24,6 @@ public class EnemyScript : MonoBehaviour
 
         StartCoroutine(MoveCoroutine());
         StartCoroutine(PerformActionCoroutine());
-    }
-
-    void Update()
-    {
-
     }
 
     private void CreateLaser(GameObject laser)
@@ -61,10 +59,15 @@ public class EnemyScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("PlayerLaser"))
+        if (collision.CompareTag("PlayerLaser") || collision.CompareTag("PlayerFirstSuperLaser"))
         {
             audioScript.EnemyHitSFX();
-            // TODO: floating number effect
+
+            GameObject obj = Instantiate(floatingTxt, transform.position, Quaternion.identity);
+            obj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+            obj.GetComponent<TextMeshProUGUI>().text = "1";
+            obj.transform.position = transform.position;
+
             hp -= 1;
             CheckHP();
 

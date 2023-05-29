@@ -16,12 +16,6 @@ public class AudioScript : MonoBehaviour
         audioSource = GameObject.Find("Audio Source").GetComponent<AudioSource>();
     }
 
-    
-    void Update()
-    {
-        
-    }
-
     public void SelectSFX()
     {
         audioSource.PlayOneShot(selectSFX, 0.5f);

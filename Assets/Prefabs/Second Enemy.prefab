@@ -152,4 +152,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   laserPrefab: {fileID: 3241519058191919100, guid: c69d091a16addca43af5175636f85dfd, type: 3}
+  floatingTxt: {fileID: 535750006303848830, guid: 5a6b0188fdabcb34b8b1a8c902172720, type: 3}
   hp: 3

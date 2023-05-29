@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -21,20 +22,21 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI godModeTxt;
 
-
-    float cooldownDuration = 2f;
-    private bool isOnCooldown = false, godMode = false;
+    int currentScore = 0;
+    float cooldownDuration = 2f, firstSuperAttackCooldownDuration = 20f;
+    private bool isOnCooldown = false, isFirstSuperAttackOnCooldown = false, godMode = false;
     [SerializeField] Image cooldownImage;
-        
+    [SerializeField] Image firstSuperAttackCooldownImage;
+
     float speed = 5f;
-
-
+    
     void Start()
     {
         audioScript = GameObject.Find("AudioObject").GetComponent<AudioScript>();
 
         rb = GetComponent<Rigidbody2D>();
         cooldownImage.fillAmount = 0f;
+        firstSuperAttackCooldownImage.fillAmount = 0f;
     }
 
     void FixedUpdate()
@@ -52,16 +54,19 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
             StartCoroutine(FirstSuperAttack());
-            
         }
     }
 
     private IEnumerator FirstSuperAttack()
     {
-        for (int i = 0; i < 100; i++)
+        if (!isFirstSuperAttackOnCooldown)
         {
-            StartCoroutine(CreateLaserOfFirstSuperAttack());
-            yield return new WaitForSeconds(0.01f);
+            StartCoroutine(FirstSuperCooldownCoroutine());
+            for (int i = 0; i < 100; i++)
+            {
+                StartCoroutine(CreateLaserOfFirstSuperAttack());
+                yield return new WaitForSeconds(0.01f);
+            }
         }
     }
     private IEnumerator CreateLaserOfFirstSuperAttack()
@@ -132,7 +137,23 @@ public class PlayerScript : MonoBehaviour
         }
 
         isOnCooldown = false;
-        cooldownImage.fillAmount = 1f;
+        cooldownImage.fillAmount = 0f;
+    }
+
+    private IEnumerator FirstSuperCooldownCoroutine()
+    {
+        isFirstSuperAttackOnCooldown = true;
+        float timer = firstSuperAttackCooldownDuration;
+
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            firstSuperAttackCooldownImage.fillAmount = 1f - (timer / firstSuperAttackCooldownDuration);
+            yield return null;
+        }
+
+        isFirstSuperAttackOnCooldown = false;
+        firstSuperAttackCooldownImage.fillAmount = 0f;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -142,6 +163,9 @@ public class PlayerScript : MonoBehaviour
             Destroy(collision.gameObject);
             gameObject.SetActive(false);
             audioScript.ExplosionSFX();
+            // Set the highest score
+            if (PlayerPrefs.GetInt("highScore") < currentScore)
+                PlayerPrefs.SetInt("highScore", currentScore);
             // TODO: explosion particle effect
             Invoke("ReturnToMenu", 3f);
         }

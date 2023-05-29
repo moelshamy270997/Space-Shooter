@@ -16,16 +16,9 @@ public class GameScript : MonoBehaviour
 
 
         highScore = PlayerPrefs.GetInt("highScore");
-        // highScore += 10;
-        PlayerPrefs.SetInt("highScore", highScore);
+        // PlayerPrefs.SetInt("highScore", 0);
 
         StartCoroutine(CreatePrefabCoroutine());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private IEnumerator CreatePrefabCoroutine()

@@ -37,4 +37,13 @@ public class LaserScript : MonoBehaviour
         Destroy(gameObject);
     }
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        // If the super Attack is on, if the Super Laser hits the enemy's laser, it will be destroyed
+        if (collision.CompareTag("EnemyLaser") && gameObject.CompareTag("PlayerFirstSuperLaser"))
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
 }

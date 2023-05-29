@@ -77,7 +77,12 @@ public class EnemyScript : MonoBehaviour
         if (collision.CompareTag("PlayerTripleLaser"))
         {
             audioScript.EnemyHitSFX();
-            // TODO: floating number effect
+
+            GameObject obj = Instantiate(floatingTxt, transform.position, Quaternion.identity);
+            obj.transform.SetParent(GameObject.Find("Canvas").transform, false);
+            obj.GetComponent<TextMeshProUGUI>().text = "2";
+            obj.transform.position = transform.position;
+
             hp -= 2;
             CheckHP();
 

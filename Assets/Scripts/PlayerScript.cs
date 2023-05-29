@@ -13,9 +13,12 @@ public class PlayerScript : MonoBehaviour
 
     AudioScript audioScript;
 
+    [SerializeField] GameObject explosionEffect;
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject tripleLaserPrefab;
     [SerializeField] GameObject firstSuperLaserPrefab;
+    [SerializeField] GameObject secondSuperLaserPrefab;
+    [SerializeField] GameObject secondSuperLaserPrefab2;
     [SerializeField] InputActionReference playerMovement;
     [SerializeField] InputActionReference playerFire;
     [SerializeField] InputActionReference playerTripleFire;
@@ -23,10 +26,11 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI godModeTxt;
 
     int currentScore = 0;
-    float cooldownDuration = 2f, firstSuperAttackCooldownDuration = 20f;
-    private bool isOnCooldown = false, isFirstSuperAttackOnCooldown = false, godMode = false;
+    float cooldownDuration = 2f, firstSuperAttackCooldownDuration = 20f, secondSuperAttackCooldownDuration = 20f;
+    private bool isOnCooldown = false, isFirstSuperAttackOnCooldown = false, isSecondSuperAttackOnCooldown = false, godMode = false;
     [SerializeField] Image cooldownImage;
     [SerializeField] Image firstSuperAttackCooldownImage;
+    [SerializeField] Image secondSuperAttackCooldownImage;
 
     float speed = 5f;
     
@@ -37,6 +41,7 @@ public class PlayerScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         cooldownImage.fillAmount = 0f;
         firstSuperAttackCooldownImage.fillAmount = 0f;
+        secondSuperAttackCooldownImage.fillAmount = 0f;
     }
 
     void FixedUpdate()
@@ -51,12 +56,28 @@ public class PlayerScript : MonoBehaviour
             GodMode();
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+        if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
         {
             StartCoroutine(FirstSuperAttack());
         }
-    }
 
+        if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            StartCoroutine(SecondSuperAttack());
+        }
+    }
+    private IEnumerator SecondSuperAttack()
+    {
+        if (!isSecondSuperAttackOnCooldown)
+        {
+            StartCoroutine(SecondSuperCooldownCoroutine());
+            for (int i = 0; i < 100; i++)
+            {
+                StartCoroutine(CreateLaserOfSecondSuperAttack());
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+    }
     private IEnumerator FirstSuperAttack()
     {
         if (!isFirstSuperAttackOnCooldown)
@@ -79,6 +100,38 @@ public class PlayerScript : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
     }
+
+    private IEnumerator CreateLaserOfSecondSuperAttack()
+    {
+        float angleIncrement = 360f / 20; // Divide 360 degrees into 20 lasers
+        float radius = 2f; // Adjust the radius of the circular pattern
+
+        // Create sweeping lasers
+        for (int j = 0; j < 20; j++)
+        {
+            float angle = j * angleIncrement;
+            Vector3 offset = Quaternion.Euler(0f, 0f, angle) * (Vector3.right * radius);
+
+            Instantiate(secondSuperLaserPrefab, transform.position + offset, Quaternion.Euler(0f, 0f, angle));
+            yield return new WaitForSeconds(0.02f);
+        }
+
+        yield return new WaitForSeconds(1.0f); // Adjust the pause before burst
+
+        // Create burst of lasers
+        int burstSize = 12; // Number of lasers in the burst
+        float burstRadius = 1.5f; // Adjust the radius of the burst pattern
+
+        for (int k = 0; k < burstSize; k++)
+        {
+            float angle = k * (360f / burstSize);
+            Vector3 offset = Quaternion.Euler(0f, 0f, angle) * (Vector3.right * burstRadius);
+
+            Instantiate(secondSuperLaserPrefab2, transform.position + offset, Quaternion.Euler(0f, 0f, angle));
+            yield return new WaitForSeconds(0.1f); // Adjust the delay between each laser in the burst
+        }
+    }
+
 
     private void OnEnable()
     {
@@ -156,6 +209,22 @@ public class PlayerScript : MonoBehaviour
         firstSuperAttackCooldownImage.fillAmount = 0f;
     }
 
+    private IEnumerator SecondSuperCooldownCoroutine()
+    {
+        isSecondSuperAttackOnCooldown = true;
+        float timer = secondSuperAttackCooldownDuration;
+
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            secondSuperAttackCooldownImage.fillAmount = 1f - (timer / firstSuperAttackCooldownDuration);
+            yield return null;
+        }
+
+        isSecondSuperAttackOnCooldown = false;
+        secondSuperAttackCooldownImage.fillAmount = 0f;
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("EnemyLaser") && !godMode)
@@ -169,6 +238,7 @@ public class PlayerScript : MonoBehaviour
                 PlayerPrefs.SetInt("highScore", currentScore);
 
             // TODO: explosion particle effect
+            Instantiate(explosionEffect, transform.position, Quaternion.identity);
             Invoke("ReturnToMenu", 3f);
         }
     }

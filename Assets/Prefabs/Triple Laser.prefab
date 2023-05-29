@@ -155,9 +155,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6481866289543884033}
+  - component: {fileID: -2680250727273328356}
   m_Layer: 0
   m_Name: Triple Laser
-  m_TagString: Untagged
+  m_TagString: PlayerSecondSuperLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,6 +181,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2680250727273328356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6481866289543884034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce11b2cf47628de4495daffc13f2c3bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6481866290275450123
 GameObject:
   m_ObjectHideFlags: 0

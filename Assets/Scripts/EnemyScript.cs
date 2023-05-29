@@ -8,6 +8,7 @@ public class EnemyScript : MonoBehaviour
     float moveSpeed = 5f;
     GameObject topLimit;
     GameObject bottomLimit;
+    [SerializeField] GameObject explosionEffect;
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject floatingTxt;
     [SerializeField] Canvas canvas;
@@ -59,7 +60,7 @@ public class EnemyScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("PlayerLaser") || collision.CompareTag("PlayerFirstSuperLaser"))
+        if (collision.CompareTag("PlayerLaser") || collision.CompareTag("PlayerFirstSuperLaser") || collision.CompareTag("PlayerSecondSuperLaser"))
         {
             audioScript.EnemyHitSFX();
 
@@ -99,6 +100,8 @@ public class EnemyScript : MonoBehaviour
             audioScript.ExplosionSFX();
 
             // TODO: explosion effect
+            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            
         }
     }
 

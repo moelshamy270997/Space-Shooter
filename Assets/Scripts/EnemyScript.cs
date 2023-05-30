@@ -5,6 +5,8 @@ using TMPro;
 
 public class EnemyScript : MonoBehaviour
 {
+    GameObject game;
+    
     float moveSpeed = 5f;
     GameObject topLimit;
     GameObject bottomLimit;
@@ -101,6 +103,13 @@ public class EnemyScript : MonoBehaviour
 
             // TODO: explosion effect
             Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+            //Change level
+
+            game = GameObject.Find("GameObject");
+            GameScript gameScript = game.GetComponent<GameScript>();
+            gameScript.IncreaseLevel();
+
             
         }
     }

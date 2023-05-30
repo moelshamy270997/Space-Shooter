@@ -469,6 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2c15b12d0e433438dfa9362406d028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textMeshProComponent: {fileID: 586057674}
   enemyPrefabs:
   - {fileID: 2552949636018770028, guid: b43ffb5cb55175d438ea59856315f5cc, type: 3}
   - {fileID: 2552949636018770028, guid: eaa10b0c02a6bbc47bd573d469a28f28, type: 3}
@@ -808,7 +809,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: WAVE 000
+  m_text: WAVE 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c651837cab2fb8741aeda7d89cae0c97, type: 2}
   m_sharedMaterial: {fileID: -5804211316226149736, guid: c651837cab2fb8741aeda7d89cae0c97, type: 2}

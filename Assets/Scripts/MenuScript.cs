@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class MenuScript : MonoBehaviour
 {
+    GameObject game;
     AudioScript audioScript;
     [SerializeField] TextMeshProUGUI infoTxt;
     [SerializeField] TextMeshProUGUI highScoreTxt;
@@ -16,14 +17,16 @@ public class MenuScript : MonoBehaviour
     void Start()
     {
         audioScript = GameObject.Find("AudioObject").GetComponent<AudioScript>();
-
-        if (PlayerPrefs.GetInt("highScore") != 0)
-            highScore = PlayerPrefs.GetInt("highScore");
-        else
-        {
-            highScore = 0;
-            PlayerPrefs.SetInt("highScore", highScore);
-        }
+        game = GameObject.Find("GameObject");
+        GameScript gameScript = game.GetComponent<GameScript>();
+        //highScore = gameScript.GetHighScore();
+        //if (PlayerPrefs.GetInt("highScore") != 0)
+        //    highScore = PlayerPrefs.GetInt("highScore");
+        //else
+        //{
+        //    highScore = 0;
+        //    PlayerPrefs.SetInt("highScore", highScore);
+        //}
 
         highScoreTxt.text = "High Score: " + highScore.ToString();
     }

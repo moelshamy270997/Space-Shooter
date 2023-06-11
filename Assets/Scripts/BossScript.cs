@@ -1,13 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class BossScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    GameObject game;
-
     float moveSpeed = 5f;
     GameObject topLimit;
     GameObject bottomLimit;
@@ -15,7 +11,6 @@ public class BossScript : MonoBehaviour
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject laserPrefab2;
     [SerializeField] GameObject floatingTxt;
-    [SerializeField] Canvas canvas;
     AudioScript audioScript;
     bool movingUp = true;
     public int hp;
@@ -59,9 +54,9 @@ public class BossScript : MonoBehaviour
 
             transform.Translate(direction * moveSpeed * Time.deltaTime);
 
-            if (movingUp && transform.position.y >= topLimit.transform.position.y)
+            if (movingUp && transform.position.y >= topLimit.transform.position.y - 0.5)
                 movingUp = false;
-            else if (!movingUp && transform.position.y <= bottomLimit.transform.position.y)
+            else if (!movingUp && transform.position.y <= bottomLimit.transform.position.y + 0.5)
                 movingUp = true;
 
             yield return null;
@@ -103,22 +98,15 @@ public class BossScript : MonoBehaviour
 
     private void CheckHP()
     {
+        // Enemy is dead
         if (hp <= 0)
         {
-            // Enemy is dead
             Destroy(gameObject);
             audioScript.ExplosionSFX();
 
-            // TODO: explosion effect
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
-
-            //Change level
-
-            game = GameObject.Find("GameObject");
-            GameScript gameScript = game.GetComponent<GameScript>();
-            gameScript.IncreaseLevel();
-
-
+            // Explosion Effect
+            GameObject explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Destroy(explosion, 2f);
         }
     }
 }

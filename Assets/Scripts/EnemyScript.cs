@@ -1,22 +1,19 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class EnemyScript : MonoBehaviour
 {
-    GameObject game;
-    
     float moveSpeed = 5f;
     GameObject topLimit;
     GameObject bottomLimit;
     [SerializeField] GameObject explosionEffect;
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject floatingTxt;
-    [SerializeField] Canvas canvas;
     AudioScript audioScript;
     bool movingUp = true;
     public int hp;
+    public float laserDelay;
 
     void Start()
     {
@@ -95,23 +92,15 @@ public class EnemyScript : MonoBehaviour
 
     private void CheckHP()
     {
+        // Enemy is dead
         if (hp <= 0)
         {
-            // Enemy is dead
             Destroy(gameObject);
             audioScript.ExplosionSFX();
 
-            // TODO: explosion effect
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
-
-            //Change level
-
-            game = GameObject.Find("GameObject");
-            GameScript gameScript = game.GetComponent<GameScript>();
-            gameScript.IncreaseLevel();
-
-            
+            // Explosion Effect
+            GameObject explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Destroy(explosion, 2f);            
         }
     }
-
 }

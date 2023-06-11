@@ -66,6 +66,8 @@ public class PlayerScript : MonoBehaviour
             StartCoroutine(SecondSuperAttack());
         }
     }
+
+
     private IEnumerator SecondSuperAttack()
     {
         if (!isSecondSuperAttackOnCooldown)
@@ -144,6 +146,8 @@ public class PlayerScript : MonoBehaviour
         playerMovement.action.performed += OnMovement;
         playerMovement.action.canceled += OnMovement;
         playerMovement.action.Enable();
+
+
     }
 
     private void OnDisable()
@@ -237,9 +241,9 @@ public class PlayerScript : MonoBehaviour
             if (PlayerPrefs.GetInt("highScore") < currentScore)
                 PlayerPrefs.SetInt("highScore", currentScore);
 
-            // TODO: explosion particle effect
+            // Explosion Effect
             Instantiate(explosionEffect, transform.position, Quaternion.identity);
-            Invoke("ReturnToMenu", 3f);
+            Invoke("ReturnToMenu", 4f);
         }
     }
 

@@ -19,15 +19,20 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] GameObject firstSuperLaserPrefab;
     [SerializeField] GameObject secondSuperLaserPrefab;
     [SerializeField] GameObject secondSuperLaserPrefab2;
+
     [SerializeField] InputActionReference playerMovement;
     [SerializeField] InputActionReference playerFire;
     [SerializeField] InputActionReference playerTripleFire;
+    [SerializeField] InputActionReference playerFirstSuperFire;
+    [SerializeField] InputActionReference playerSecondSuperFire;
+    [SerializeField] InputActionReference godMode;
 
+    [SerializeField] TextMeshProUGUI wonTxt;
     [SerializeField] TextMeshProUGUI godModeTxt;
 
     int currentScore = 0;
-    float cooldownDuration = 2f, firstSuperAttackCooldownDuration = 20f, secondSuperAttackCooldownDuration = 20f;
-    private bool isOnCooldown = false, isFirstSuperAttackOnCooldown = false, isSecondSuperAttackOnCooldown = false, godMode = false;
+    float cooldownDuration = 4f, firstSuperAttackCooldownDuration = 40f, secondSuperAttackCooldownDuration = 40f;
+    private bool isOnCooldown = false, isFirstSuperAttackOnCooldown = false, isSecondSuperAttackOnCooldown = false, godModeFlag = false;
     [SerializeField] Image cooldownImage;
     [SerializeField] Image firstSuperAttackCooldownImage;
     [SerializeField] Image secondSuperAttackCooldownImage;
@@ -49,25 +54,6 @@ public class PlayerScript : MonoBehaviour
         rb.velocity = new Vector2(moveDirection.x * speed, moveDirection.y * speed);
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            GodMode();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            StartCoroutine(FirstSuperAttack());
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            StartCoroutine(SecondSuperAttack());
-        }
-    }
-
-
     private IEnumerator SecondSuperAttack()
     {
         if (!isSecondSuperAttackOnCooldown)
@@ -85,10 +71,10 @@ public class PlayerScript : MonoBehaviour
         if (!isFirstSuperAttackOnCooldown)
         {
             StartCoroutine(FirstSuperCooldownCoroutine());
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 20; i++)
             {
                 StartCoroutine(CreateLaserOfFirstSuperAttack());
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.1f);
             }
         }
     }
@@ -147,6 +133,14 @@ public class PlayerScript : MonoBehaviour
         playerMovement.action.canceled += OnMovement;
         playerMovement.action.Enable();
 
+        playerFirstSuperFire.action.performed += OnFirstSuperAttackFire;
+        playerFirstSuperFire.action.Enable();
+
+        playerSecondSuperFire.action.performed += OnSecondSuperAttackFire;
+        playerSecondSuperFire.action.Enable();
+
+        godMode.action.performed += OnGodMode;
+        godMode.action.Enable();
 
     }
 
@@ -155,6 +149,9 @@ public class PlayerScript : MonoBehaviour
         playerFire.action.Disable();
         playerTripleFire.action.Disable();
         playerMovement.action.Disable();
+        playerFirstSuperFire.action.Disable();
+        playerSecondSuperFire.action.Disable();
+        godMode.action.Disable();
     }
 
     private void CreateLaser(GameObject laser)
@@ -165,6 +162,21 @@ public class PlayerScript : MonoBehaviour
     private void OnFire(InputAction.CallbackContext context)
     {
         CreateLaser(laserPrefab);
+    }
+
+    private void OnFirstSuperAttackFire(InputAction.CallbackContext context)
+    {
+        StartCoroutine(FirstSuperAttack());
+    }
+
+    private void OnSecondSuperAttackFire(InputAction.CallbackContext context)
+    {
+        StartCoroutine(SecondSuperAttack());
+    }
+
+    private void OnGodMode(InputAction.CallbackContext context)
+    {
+        GodMode();
     }
 
     private void OnTripleFire(InputAction.CallbackContext context)
@@ -231,11 +243,11 @@ public class PlayerScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("EnemyLaser") && !godMode)
+        if (collision.CompareTag("EnemyLaser") && !godModeFlag)
         {
             Destroy(collision.gameObject);
             gameObject.SetActive(false);
-            audioScript.ExplosionSFX();
+            audioScript.PlayerExplosionSFX();
 
             // Set the highest score
             if (PlayerPrefs.GetInt("highScore") < currentScore)
@@ -254,9 +266,16 @@ public class PlayerScript : MonoBehaviour
 
     private void GodMode()
     {
-        godMode = !godMode;
-        godModeTxt.gameObject.SetActive(godMode);
-        if (godMode)
+        godModeFlag = !godModeFlag;
+        godModeTxt.gameObject.SetActive(godModeFlag);
+        if (godModeFlag)
             audioScript.GodModeSFX();
+    }
+
+    public void GameWonFunction()
+    {
+        audioScript.WonSFX();
+        wonTxt.gameObject.SetActive(true);
+        Invoke("ReturnToMenu", 5f);
     }
 }

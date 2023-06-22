@@ -12,7 +12,7 @@ public class BossScript : MonoBehaviour
     [SerializeField] GameObject laserPrefab2;
     [SerializeField] GameObject floatingTxt;
     AudioScript audioScript;
-    bool movingUp = true;
+    bool movingUp;
     public int hp;
 
     void Start()
@@ -22,11 +22,13 @@ public class BossScript : MonoBehaviour
         topLimit = GameObject.Find("EnemyTopLimit").gameObject;
         bottomLimit = GameObject.Find("EnemyBottomLimit").gameObject;
 
+        movingUp = true ? Mathf.RoundToInt(Random.value) == 1 : false;
+
         StartCoroutine(MoveCoroutine());
         StartCoroutine(PerformActionCoroutine());
     }
 
-    private void CreateLaser(GameObject laser, GameObject laser2)
+    private void CreateLaser(GameObject laser)
     {
         Instantiate(laser, transform.position + Vector3.left, Quaternion.Euler(0f, 0f, 90f));
     }
@@ -35,14 +37,11 @@ public class BossScript : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(3f);
-            CreateLaser(laserPrefab, laserPrefab2);
-            yield return new WaitForSeconds(0.5f);
-            CreateLaser(laserPrefab2, laserPrefab);
-            yield return new WaitForSeconds(0.5f);
-            CreateLaser(laserPrefab, laserPrefab2);
-            yield return new WaitForSeconds(0.5f);
-            CreateLaser(laserPrefab2, laserPrefab);
+            yield return new WaitForSeconds(Random.value * 5);
+            CreateLaser(laserPrefab);
+
+            yield return new WaitForSeconds(1f);
+            CreateLaser(laserPrefab2);
         }
     }
 
@@ -51,7 +50,6 @@ public class BossScript : MonoBehaviour
         while (true)
         {
             Vector3 direction = movingUp ? Vector3.left : Vector3.right;
-
             transform.Translate(direction * moveSpeed * Time.deltaTime);
 
             if (movingUp && transform.position.y >= topLimit.transform.position.y - 0.5)
@@ -67,6 +65,7 @@ public class BossScript : MonoBehaviour
     {
         if (collision.CompareTag("PlayerLaser") || collision.CompareTag("PlayerFirstSuperLaser") || collision.CompareTag("PlayerSecondSuperLaser"))
         {
+            FindObjectOfType<GameScript>().SetLevelUp(true);
             audioScript.EnemyHitSFX();
 
             GameObject obj = Instantiate(floatingTxt, transform.position, Quaternion.identity);
@@ -82,6 +81,7 @@ public class BossScript : MonoBehaviour
 
         if (collision.CompareTag("PlayerTripleLaser"))
         {
+            FindObjectOfType<GameScript>().SetLevelUp(true);
             audioScript.EnemyHitSFX();
 
             GameObject obj = Instantiate(floatingTxt, transform.position, Quaternion.identity);

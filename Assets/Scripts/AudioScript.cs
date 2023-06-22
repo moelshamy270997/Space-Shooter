@@ -7,6 +7,7 @@ public class AudioScript : MonoBehaviour
     [SerializeField] AudioClip enemyHitSFX;
     [SerializeField] AudioClip explosionSFX;
     [SerializeField] AudioClip godModeSFX;
+    [SerializeField] AudioClip wonSFX;
     AudioSource audioSource;
 
     float musicFadeDuration = 1f;
@@ -34,12 +35,28 @@ public class AudioScript : MonoBehaviour
     public void ExplosionSFX()
     {
         audioSource.PlayOneShot(explosionSFX, 0.5f);
-        StartCoroutine(FadeOutMusic());
+    }
+
+    public void WonSFX()
+    {
+        audioSource.PlayOneShot(wonSFX, 1f);
+        Invoke("FadeMusicOutStart", 0.5f);
     }
 
     public void GodModeSFX()
     {
         audioSource.PlayOneShot(godModeSFX, 0.5f);
+    }
+
+    public void PlayerExplosionSFX()
+    {
+        audioSource.PlayOneShot(explosionSFX, 0.5f);
+        StartCoroutine(FadeOutMusic());
+    }
+
+    private void FadeMusicOutStart()
+    {
+        StartCoroutine(FadeOutMusic());
     }
 
     private System.Collections.IEnumerator FadeOutMusic()

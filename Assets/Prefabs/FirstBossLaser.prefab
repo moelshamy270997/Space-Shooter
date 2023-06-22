@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2192263274005095749}
   - component: {fileID: 8159284458912279028}
-  - component: {fileID: -4990611129751433050}
   - component: {fileID: 6595826742183419872}
   - component: {fileID: 8397176178505953045}
+  - component: {fileID: 5538289338333960837}
   m_Layer: 0
-  m_Name: BossLaser2
+  m_Name: FirstBossLaser
   m_TagString: EnemyLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3318953629781088925}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.83, y: -1, z: -0.08536561}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -87,18 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-4990611129751433050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3318953629781088925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce11b2cf47628de4495daffc13f2c3bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &6595826742183419872
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -146,3 +134,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5538289338333960837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3318953629781088925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b9a3ca2ef251c14c8f2db1b7503b429, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

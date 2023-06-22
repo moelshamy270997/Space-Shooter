@@ -11,7 +11,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject floatingTxt;
     AudioScript audioScript;
-    bool movingUp = true;
+    bool movingUp;
     public int hp;
     public float laserDelay;
 
@@ -24,6 +24,8 @@ public class EnemyScript : MonoBehaviour
 
         StartCoroutine(MoveCoroutine());
         StartCoroutine(PerformActionCoroutine());
+
+        movingUp = true ? Mathf.RoundToInt(Random.value) == 1 : false;
     }
 
     private void CreateLaser(GameObject laser)
@@ -35,7 +37,7 @@ public class EnemyScript : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(Random.value * 5 + 1);
             CreateLaser(laserPrefab);
         }
     }
@@ -61,6 +63,7 @@ public class EnemyScript : MonoBehaviour
     {
         if (collision.CompareTag("PlayerLaser") || collision.CompareTag("PlayerFirstSuperLaser") || collision.CompareTag("PlayerSecondSuperLaser"))
         {
+            FindObjectOfType<GameScript>().SetLevelUp(true);
             audioScript.EnemyHitSFX();
 
             GameObject obj = Instantiate(floatingTxt, transform.position, Quaternion.identity);
@@ -72,10 +75,12 @@ public class EnemyScript : MonoBehaviour
             CheckHP();
 
             Destroy(collision.gameObject);
+
         }
 
         if (collision.CompareTag("PlayerTripleLaser"))
         {
+            FindObjectOfType<GameScript>().SetLevelUp(true);
             audioScript.EnemyHitSFX();
 
             GameObject obj = Instantiate(floatingTxt, transform.position, Quaternion.identity);
@@ -95,8 +100,8 @@ public class EnemyScript : MonoBehaviour
         // Enemy is dead
         if (hp <= 0)
         {
-            Destroy(gameObject);
             audioScript.ExplosionSFX();
+            Destroy(gameObject);
 
             // Explosion Effect
             GameObject explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);

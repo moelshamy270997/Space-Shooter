@@ -10422,6 +10422,7 @@ GameObject:
   - component: {fileID: 2032113338}
   - component: {fileID: 2032113340}
   - component: {fileID: 2032113339}
+  - component: {fileID: 2032113341}
   m_Layer: 5
   m_Name: Start Game Text
   m_TagString: Untagged
@@ -10546,6 +10547,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2032113337}
   m_CullTransparentMesh: 1
+--- !u!114 &2032113341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032113337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23c8c7493fd62c478868833ed845ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2036942087
 GameObject:
   m_ObjectHideFlags: 0
@@ -10575,8 +10588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2b0071e3c66ecd45bff794ffc09fd0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoTxt: {fileID: 2032113339}
   highScoreTxt: {fileID: 902571076}
+  gameStart: {fileID: 801255637482420241, guid: 0092dacb86021884abc4849c5d4a5edc, type: 3}
 --- !u!4 &2036942089
 Transform:
   m_ObjectHideFlags: 0
@@ -10626,6 +10639,7 @@ MonoBehaviour:
   enemyHitSFX: {fileID: 8300000, guid: 2ab0f1363482cc1469e52d64af5dea1e, type: 3}
   explosionSFX: {fileID: 8300000, guid: 612a347949e7721478f36c965aaba3a7, type: 3}
   godModeSFX: {fileID: 8300000, guid: 97231adda5f752244b56e4e2f82e1f0a, type: 3}
+  wonSFX: {fileID: 0}
 --- !u!4 &2098226727
 Transform:
   m_ObjectHideFlags: 0

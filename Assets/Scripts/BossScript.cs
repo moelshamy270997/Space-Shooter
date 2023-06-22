@@ -1,19 +1,19 @@
 using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-public class EnemyScript : MonoBehaviour
+public class BossScript : MonoBehaviour
 {
     float moveSpeed = 5f;
     GameObject topLimit;
     GameObject bottomLimit;
     [SerializeField] GameObject explosionEffect;
     [SerializeField] GameObject laserPrefab;
+    [SerializeField] GameObject laserPrefab2;
     [SerializeField] GameObject floatingTxt;
     AudioScript audioScript;
     bool movingUp;
     public int hp;
-    public float laserDelay;
 
     void Start()
     {
@@ -22,10 +22,10 @@ public class EnemyScript : MonoBehaviour
         topLimit = GameObject.Find("EnemyTopLimit").gameObject;
         bottomLimit = GameObject.Find("EnemyBottomLimit").gameObject;
 
+        movingUp = true ? Mathf.RoundToInt(Random.value) == 1 : false;
+
         StartCoroutine(MoveCoroutine());
         StartCoroutine(PerformActionCoroutine());
-
-        movingUp = true ? Mathf.RoundToInt(Random.value) == 1 : false;
     }
 
     private void CreateLaser(GameObject laser)
@@ -37,8 +37,11 @@ public class EnemyScript : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.value * 5 + 1);
+            yield return new WaitForSeconds(Random.value * 5);
             CreateLaser(laserPrefab);
+
+            yield return new WaitForSeconds(1f);
+            CreateLaser(laserPrefab2);
         }
     }
 
@@ -47,12 +50,11 @@ public class EnemyScript : MonoBehaviour
         while (true)
         {
             Vector3 direction = movingUp ? Vector3.left : Vector3.right;
-
             transform.Translate(direction * moveSpeed * Time.deltaTime);
 
-            if (movingUp && transform.position.y >= topLimit.transform.position.y)
+            if (movingUp && transform.position.y >= topLimit.transform.position.y - 0.5)
                 movingUp = false;
-            else if (!movingUp && transform.position.y <= bottomLimit.transform.position.y)
+            else if (!movingUp && transform.position.y <= bottomLimit.transform.position.y + 0.5)
                 movingUp = true;
 
             yield return null;
@@ -75,7 +77,6 @@ public class EnemyScript : MonoBehaviour
             CheckHP();
 
             Destroy(collision.gameObject);
-
         }
 
         if (collision.CompareTag("PlayerTripleLaser"))
@@ -100,12 +101,12 @@ public class EnemyScript : MonoBehaviour
         // Enemy is dead
         if (hp <= 0)
         {
-            audioScript.ExplosionSFX();
             Destroy(gameObject);
+            audioScript.ExplosionSFX();
 
             // Explosion Effect
             GameObject explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
-            Destroy(explosion, 2f);            
+            Destroy(explosion, 2f);
         }
     }
 }

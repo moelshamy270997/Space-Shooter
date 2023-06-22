@@ -6,11 +6,9 @@ using UnityEngine.InputSystem;
 public class MenuScript : MonoBehaviour
 {
     AudioScript audioScript;
-    [SerializeField] TextMeshProUGUI infoTxt;
     [SerializeField] TextMeshProUGUI highScoreTxt;
+    [SerializeField] InputActionReference gameStart;
 
-    float zoomSpeed = 0.2f, maxScale = 1.1f, minScale = 0.9f, currentScale = 0.2f;
-    bool zoomIn = true;
     int highScore;
 
     void Start()
@@ -27,32 +25,20 @@ public class MenuScript : MonoBehaviour
 
         highScoreTxt.text = "High Score: " + highScore.ToString();
     }
-
-    void Update()
+    private void OnEnable()
     {
-        InfoTxtMove();
-        
-        if (Input.anyKeyDown)
-        {
-            audioScript.SelectSFX();
-            SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-        }
-        
+        gameStart.action.performed += OnGameStart;
+        gameStart.action.Enable();
     }
 
-    void InfoTxtMove()
+    private void OnDisable()
     {
-        if (zoomIn)
-            currentScale += zoomSpeed * Time.deltaTime;
-        else
-            currentScale -= zoomSpeed * Time.deltaTime;
-
-        if (currentScale > maxScale)
-            zoomIn = false;
-        else if (currentScale < minScale)
-            zoomIn = true;
-
-        infoTxt.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+        gameStart.action.Disable();
     }
 
+    private void OnGameStart(InputAction.CallbackContext context)
+    {
+        audioScript.SelectSFX();
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+    }
 }

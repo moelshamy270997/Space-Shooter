@@ -21,6 +21,13 @@ public class LaserScript : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, -135f);
         if (transform.position.y < -4f && gameObject.CompareTag("PlayerFirstSuperLaser"))
             transform.rotation = Quaternion.Euler(0f, 0f, -45);
+
+
+        // Second Super Attack Effect
+        if (transform.position.y > 4f && gameObject.CompareTag("PlayerSecondSuperLaser"))
+            transform.rotation = Quaternion.Euler(0f, 0f, -135f);
+        if (transform.position.y < -4f && gameObject.CompareTag("PlayerSecondSuperLaser"))
+            transform.rotation = Quaternion.Euler(0f, 0f, -45);
     }
 
     private IEnumerator MoveRightCoroutine(GameObject obj)
@@ -40,7 +47,7 @@ public class LaserScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         // If the super Attack is on, if the Super Laser hits the enemy's laser, it will be destroyed
-        if (collision.CompareTag("EnemyLaser") && gameObject.CompareTag("PlayerFirstSuperLaser"))
+        if (( collision.CompareTag("EnemyLaser") && gameObject.CompareTag("PlayerFirstSuperLaser") ) || (collision.CompareTag("EnemyLaser") && gameObject.CompareTag("PlayerSecondSuperLaser")))
         {
             Destroy(collision.gameObject);
         }

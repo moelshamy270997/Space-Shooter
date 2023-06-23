@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossScript : MonoBehaviour
 {
-    float moveSpeed = 5f;
+    float moveSpeed = 5f, delayFactor = 5f;
     GameObject topLimit;
     GameObject bottomLimit;
     [SerializeField] GameObject explosionEffect;
@@ -12,7 +12,7 @@ public class BossScript : MonoBehaviour
     [SerializeField] GameObject laserPrefab2;
     [SerializeField] GameObject floatingTxt;
     AudioScript audioScript;
-    bool movingUp;
+    bool movingUp, movingForward = false, movingForwardAttack = false;
     public int hp;
 
     void Start()
@@ -26,6 +26,8 @@ public class BossScript : MonoBehaviour
 
         StartCoroutine(MoveCoroutine());
         StartCoroutine(PerformActionCoroutine());
+        if (gameObject.tag == "SecondBoss")
+            StartCoroutine(PerformMoveForwardCoroutine(GameObject.FindGameObjectsWithTag("SecondBoss")[0]));
     }
 
     private void CreateLaser(GameObject laser)
@@ -37,11 +39,27 @@ public class BossScript : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.value * 5);
+            yield return new WaitForSeconds(Random.value * delayFactor);
             CreateLaser(laserPrefab);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(Random.value / 2.0f);
             CreateLaser(laserPrefab2);
+        }
+    }
+
+    private IEnumerator PerformMoveForwardCoroutine(GameObject obj)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(3f);
+            delayFactor = 3.5f;
+            movingForwardAttack = true;
+            StartCoroutine(MoveForwardCoroutine(obj));
+
+            yield return new WaitForSeconds(5f);
+            delayFactor = 5f;
+            movingForwardAttack = false;
+            StopCoroutine(MoveForwardCoroutine(obj));
         }
     }
 
@@ -56,6 +74,22 @@ public class BossScript : MonoBehaviour
                 movingUp = false;
             else if (!movingUp && transform.position.y <= bottomLimit.transform.position.y + 0.5)
                 movingUp = true;
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator MoveForwardCoroutine(GameObject obj)
+    {
+        while (movingForwardAttack)
+        {
+            Vector3 direction = movingForward ? Vector3.down : Vector3.up;
+            obj.transform.Translate(direction * 2f * Time.deltaTime);
+
+            if (movingForward && obj.transform.position.x <= 1f)
+                movingForward = false;
+            else if (!movingForward && obj.transform.position.x >= 6.2f)
+                movingForward = true;
 
             yield return null;
         }

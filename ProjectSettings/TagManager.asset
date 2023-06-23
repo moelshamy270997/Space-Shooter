@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - PlayerFirstSuperLaser
   - PlayerSecondSuperLaser
+  - SecondBoss
   layers:
   - Default
   - TransparentFX

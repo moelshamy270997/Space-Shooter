@@ -88,8 +88,10 @@ public class GameScript : MonoBehaviour
             {
                 if (currLevel == levels.fifthLevel) // Last Level after that the game will be reset
                     randomPosition = new Vector3(cameraWidth + 2f, Random.value * 2, 0f);
-                else if (currLevel == levels.tenthLevel)
-                    randomPosition = new Vector3(cameraWidth + 2f, Random.value * 4f, 0f);
+                else if (currLevel == levels.tenthLevel && j == 0)
+                    randomPosition = new Vector3(2f, Random.value * 4f, 0f);
+                else if (currLevel == levels.tenthLevel && j != 0)
+                    randomPosition = new Vector3(cameraWidth + 2, Random.value * 4f, 0f);
                 else
                     randomPosition = GenerateRandomPosition();
 

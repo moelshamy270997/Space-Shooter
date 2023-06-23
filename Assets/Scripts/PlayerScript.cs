@@ -31,14 +31,15 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI godModeTxt;
 
     int currentScore = 0;
-    float cooldownDuration = 4f, firstSuperAttackCooldownDuration = 40f, secondSuperAttackCooldownDuration = 40f;
+    float cooldownDuration = 4f, firstSuperAttackCooldownDuration = 40f, secondSuperAttackCooldownDuration = 40f, shootDelay = 0.2f, speed = 5f;
     private bool isOnCooldown = false, isFirstSuperAttackOnCooldown = false, isSecondSuperAttackOnCooldown = false, godModeFlag = false;
     [SerializeField] Image cooldownImage;
     [SerializeField] Image firstSuperAttackCooldownImage;
     [SerializeField] Image secondSuperAttackCooldownImage;
 
-    float speed = 5f;
-    
+    bool isPlayerFireHeld = false;
+    Coroutine fireCoroutine;
+
     void Start()
     {
         audioScript = GameObject.Find("AudioObject").GetComponent<AudioScript>();
@@ -123,7 +124,8 @@ public class PlayerScript : MonoBehaviour
 
     private void OnEnable()
     {
-        playerFire.action.performed += OnFire;
+        playerFire.action.started += OnFireStarted;
+        playerFire.action.canceled += OnFireCanceled;
         playerFire.action.Enable();
 
         playerTripleFire.action.performed += OnTripleFire;
@@ -154,14 +156,34 @@ public class PlayerScript : MonoBehaviour
         godMode.action.Disable();
     }
 
+    private void OnFireStarted(InputAction.CallbackContext context)
+    {
+        isPlayerFireHeld = true;
+        fireCoroutine = StartCoroutine(FireCoroutine());
+    }
+
+    private void OnFireCanceled(InputAction.CallbackContext context)
+    {
+        isPlayerFireHeld = false;
+        if (fireCoroutine != null)
+        {
+            StopCoroutine(fireCoroutine);
+            fireCoroutine = null;
+        }
+    }
+
+    private IEnumerator FireCoroutine()
+    {
+        while (isPlayerFireHeld)
+        {
+            CreateLaser(laserPrefab);
+            yield return new WaitForSeconds(shootDelay);
+        }
+    }
+
     private void CreateLaser(GameObject laser)
     {
         Instantiate(laser, transform.position + Vector3.right, Quaternion.Euler(0f, 0f, -90f));
-    }
-
-    private void OnFire(InputAction.CallbackContext context)
-    {
-        CreateLaser(laserPrefab);
     }
 
     private void OnFirstSuperAttackFire(InputAction.CallbackContext context)
